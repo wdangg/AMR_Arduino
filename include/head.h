@@ -2,6 +2,7 @@
 #define __HEAD_H__
 
 #include "middleware.h"
+#include "MPU6050_tockn.h"
 
 
 /**
@@ -34,6 +35,9 @@
 #define IN3										13
 #define IN4										8
 
+#define CATHODE_LED                             A1
+#define ANODE_LED                               A3
+
 /**
  * @brief Global Variables
  * 
@@ -57,9 +61,6 @@ PID right_PID(&right_PID_Input, &right_PID_Output, &right_PID_Setpoint, r_Kp, r_
 Motor left_motor(ENA, IN1, IN2, ENC_LEFT_A, ENC_LEFT_B, LEFT_ID);
 Motor right_motor(ENB, IN3, IN4, ENC_RIGHT_A, ENC_RIGHT_B, RIGHT_ID);
 
-int a = 0;
-char dk;
-bool state = false;
 
 /**
  * @brief Function Prototype 

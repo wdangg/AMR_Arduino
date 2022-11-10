@@ -49,7 +49,7 @@ void Motor::print_info(Serial_Type serial_type)
     {
     case e_SERIAL3:
         Serial3.println();
-        Serial3.print("enable_pin: "); Serial3.print(Motor::enable_pin);
+        Serial3.print("enable_pin: ");   Serial3.print(Motor::enable_pin);
         Serial3.print("\tcw_pin: ");     Serial3.print(Motor::cw_pin);
         Serial3.print("\tccw_pin: ");    Serial3.print(Motor::ccw_pin);
         Serial3.print("\tencoder_A: ");  Serial3.print(Motor::encoder_A);
@@ -57,21 +57,21 @@ void Motor::print_info(Serial_Type serial_type)
         break;
     case e_SERIAL2:
         Serial2.println();
-        Serial2.print("enable_pin: "); Serial2.println(Motor::enable_pin);
+        Serial2.print("enable_pin: ");   Serial2.println(Motor::enable_pin);
         Serial2.print("\tcw_pin: ");     Serial2.print(Motor::cw_pin);
         Serial2.print("\tccw_pin: ");    Serial2.print(Motor::ccw_pin);
         Serial2.print("\tencoder_A: ");  Serial2.print(Motor::encoder_A);
         Serial2.print("\tencoder_B: ");  Serial2.println(Motor::encoder_B); 
     case e_SERIAL1:
         Serial1.println();
-        Serial1.print("enable_pin: "); Serial1.println(Motor::enable_pin);
+        Serial1.print("enable_pin: ");   Serial1.println(Motor::enable_pin);
         Serial1.print("\tcw_pin: ");     Serial1.print(Motor::cw_pin);
         Serial1.print("\tccw_pin: ");    Serial1.print(Motor::ccw_pin);
         Serial1.print("\tencoder_A: ");  Serial1.print(Motor::encoder_A);
         Serial1.print("\tencoder_B: ");  Serial1.println(Motor::encoder_B); 
     case e_SERIAL:
         Serial3.println();
-        Serial3.print("enable_pin: "); Serial.println(Motor::enable_pin);
+        Serial3.print("enable_pin: ");   Serial.println(Motor::enable_pin);
         Serial3.print("\tcw_pin: ");     Serial.print(Motor::cw_pin);
         Serial3.print("\tccw_pin: ");    Serial.print(Motor::ccw_pin);
         Serial3.print("\tencoder_A: ");  Serial.print(Motor::encoder_A);
@@ -84,7 +84,6 @@ void Motor::print_info(Serial_Type serial_type)
 
 void Motor::get_current_pwm(Serial_Type serial_port)
 {
-    
     switch (serial_port)
     {
     case e_SERIAL:
