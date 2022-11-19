@@ -16,8 +16,8 @@ void Motor::init()
     pinMode(enable_pin, OUTPUT);
     pinMode(cw_pin, OUTPUT);
     pinMode(ccw_pin, OUTPUT);
-    pinMode(encoder_A, INPUT);
-    pinMode(encoder_B, INPUT);
+    pinMode(encoder_A, INPUT_PULLUP);
+    pinMode(encoder_B, INPUT_PULLUP);
 };
 
 void Motor::rotate(int pwm)
