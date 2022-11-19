@@ -40,7 +40,7 @@ class Motor
         ID_Type id;
 
     public:
-        Motor(int _enable_pin, int _cw_pin, int _ccw_pin, int _encoder_A, int _encoder_B, ID_Type id);
+        Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id);
 
         void init();
 

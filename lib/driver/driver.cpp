@@ -1,14 +1,14 @@
 #include "driver.h"
 
 
-Motor::Motor(int _enable_pin, int _cw_pin, int _ccw_pin, int _encoder_A, int _encoder_B,  ID_Type _id)
+Motor::Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id)
 {
-    Motor::enable_pin = _enable_pin;
-    Motor::cw_pin = _cw_pin;
-    Motor::ccw_pin = _ccw_pin;
-    Motor::encoder_A = _encoder_A;
-    Motor::encoder_B = _encoder_B;    
-    Motor::id = _id;
+    Motor::enable_pin = enable_pin;
+    Motor::cw_pin = cw_pin;
+    Motor::ccw_pin = ccw_pin;
+    Motor::encoder_A = encoder_A;
+    Motor::encoder_B = encoder_B;    
+    Motor::id = id;
 };
 
 void Motor::init()
@@ -16,7 +16,7 @@ void Motor::init()
     pinMode(enable_pin, OUTPUT);
     pinMode(cw_pin, OUTPUT);
     pinMode(ccw_pin, OUTPUT);
-    pinMode(encoder_A, INPUT_PULLUP);
+    pinMode(encoder_A, INPUT);
     pinMode(encoder_B, INPUT);
 };
 

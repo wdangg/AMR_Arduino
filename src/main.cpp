@@ -2,61 +2,58 @@
 
 #define MAX_PWM											200
 #define MIN_PWM											40
-#define INTERVAL_TIME									20
+#define INTERVAL_TIME									100
 #define CONTROL_TIMEOUT									2
 
-volatile bool manual_mode = false;
-
-volatile int cb_pwma = 0, cb_pwmb;
-volatile int l_pwm_out = 0, r_pwm_out = 0;
-
-volatile unsigned long pre_millis = 0, cur_millis = 0;
-
-volatile unsigned long last_cmd_receive = 0;
 
 void PID_Init();
 void ps2_control();
 void control_motor();
 
 void calc_cmd_vel(const geometry_msgs::Twist& cmdVel);
+void ISR_Right_Ticks();
+void ISR_Left_Ticks();
+
+volatile bool right_dir = true;
+volatile bool left_dir = true;
+volatile int32_t right_ticks = 0;
+volatile int32_t left_ticks = 0;
+
+volatile bool reset_board = false;
 
 ros::NodeHandle nh;
 
 ros::Subscriber<geometry_msgs::Twist> sub_cmd_vel("cmd_vel", &calc_cmd_vel);
 
+void resetBoard();
+
 void setup()
 {
-	nh.getHardware()->setBaud(57600);
+	// nh.getHardware()->setBaud(57600);
 
-	nh.initNode();
+	// nh.initNode();
 	// nh.advertise(rightPub);
 	// nh.advertise(leftPub);
-	nh.subscribe(sub_cmd_vel);
+	// nh.subscribe(sub_cmd_vel);
+	reset_board = false;
+	right_dir = true;
+	left_dir = true;
 
-	error = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, PRESSURES, RUMBLE);
-	
-	TCCR1B = TCCR1B & 0b11111000 | 1;      /* set 31KHz PWM to prevent motor noise */ 
-	
-	Serial3.begin(9600);
-	Serial3.println("Serial 3");
+	system_setup(); 
 
-	/* Initialize Motor */
-	left_motor.init();
-	right_motor.init();
+	attachInterrupt(digitalPinToInterrupt(ENC_LEFT_A), ISR_Left_Ticks, RISING);
+	attachInterrupt(digitalPinToInterrupt(ENC_RIGHT_A), ISR_Right_Ticks, RISING);
 
-	left_motor.stop();
-	right_motor.stop();
-
-	pinMode(CATHODE_LED, OUTPUT); 
-	pinMode(ANODE_LED, OUTPUT);
-	digitalWrite(CATHODE_LED, LOW); 
-	digitalWrite(ANODE_LED, 0);
-
+	delay(1000);
 } /* END SET_UP */ 
 
 void loop()
 {
-	nh.spinOnce();
+	// nh.spinOnce();
+	if (reset_board == true)
+	{
+		resetBoard();
+	}
 
 	ps2x.read_gamepad(false, vibrate);
 
@@ -65,6 +62,11 @@ void loop()
 		manual_mode = !manual_mode;
 		digitalWrite(ANODE_LED, !digitalRead(ANODE_LED));
 	}
+	else if (ps2x.ButtonReleased(PSB_R2))
+	{
+		reset_board = true;
+	}
+
 
 	if (manual_mode == true)
 	{
@@ -92,8 +94,41 @@ void loop()
 
 	/* Control Motor After Calculate These Parameters */
 	control_motor();
-		
+
+	Serial3.print("left_ticks: "); Serial3.print(left_ticks);
+	Serial3.print("\t\tright_ticks: "); Serial3.println(right_ticks);
+
+	// Serial3.print("A: "); Serial3.print(digitalRead(ENC_LEFT_A));
+	// Serial3.print("\t\tB: "); Serial3.println(digitalRead(ENC_LEFT_B));
+
 } /* END LOOP */
+
+void ISR_Right_Ticks()
+{
+	// Encoder Right A - attachInterrupts - RISING Mode
+	int8_t val = digitalRead(ENC_RIGHT_B);
+	if (val == 0)
+	{
+		right_ticks--;
+	}
+	else
+	{
+		right_ticks++;
+	}
+}
+
+void ISR_Left_Ticks()
+{
+	int8_t val = digitalRead(ENC_LEFT_B);
+	if (val == 0)
+	{
+		left_ticks++;
+	}
+	else
+	{
+		left_ticks--;
+	}
+}
 
 void calc_cmd_vel(const geometry_msgs::Twist& cmdVel)
 {
@@ -166,7 +201,6 @@ void ps2_control()
 
 void control_motor()
 {
-	Serial3.print(l_pwm_out); Serial3.print("\t"); Serial3.println(r_pwm_out);
 	left_motor.rotate(l_pwm_out);
 	right_motor.rotate(r_pwm_out);
 } /* CONTROL_MOTOR */
@@ -182,3 +216,7 @@ void PID_Init()
 	right_PID.SetOutputLimits(0, 100);
 }
 
+void resetBoard()
+{
+  asm volatile ( "jmp 0");  
+}

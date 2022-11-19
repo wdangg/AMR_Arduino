@@ -3,7 +3,7 @@
 
 #include "middleware.h"
 #include "MPU6050_tockn.h"
-
+#include "PS2X_lib.h"
 
 /**
  * @brief Definition
@@ -18,11 +18,11 @@
 #define PS2_SEL        							26
 #define PS2_CLK        							24
 
-#define ENC_LEFT_A           					19
-#define ENC_LEFT_B           					18
+#define ENC_LEFT_A           					18
+#define ENC_LEFT_B           					19
 
-#define ENC_RIGHT_A          					21
-#define ENC_RIGHT_B          					20
+#define ENC_RIGHT_A          					20
+#define ENC_RIGHT_B          					21
 
 #define WHEEL_RADIUS							0.032 //d = 64mm
 #define WHEEL_BASE								0.227
@@ -44,9 +44,14 @@
  */
 
 PS2X ps2x;
-int error = 0;
-byte type = 0;
-byte vibrate = 0;
+int8_t error = 0;
+int8_t type = 0;
+int8_t vibrate = 0;
+volatile bool manual_mode = false;
+volatile int cb_pwma = 0, cb_pwmb;
+volatile int l_pwm_out = 0, r_pwm_out = 0;
+volatile uint32_t pre_millis = 0, cur_millis = 0;
+volatile uint32_t last_cmd_receive = 0;
 
 double left_PID_Setpoint, left_PID_Input, left_PID_Output;
 double right_PID_Setpoint, right_PID_Input, right_PID_Output;
@@ -62,11 +67,32 @@ Motor left_motor(ENA, IN1, IN2, ENC_LEFT_A, ENC_LEFT_B, LEFT_ID);
 Motor right_motor(ENB, IN3, IN4, ENC_RIGHT_A, ENC_RIGHT_B, RIGHT_ID);
 
 
-/**
- * @brief Function Prototype 
- * 
- */
 
+
+void system_setup()
+{
+	cli(); /* Disable Global Interrupts */
+	error = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, PRESSURES, RUMBLE);
+	
+	TCCR1B = TCCR1B & 0b11111000 | 1;      /* set 31KHz PWM to prevent motor noise */ 
+	
+	Serial3.begin(9600);
+	Serial3.print("\n\n\n\n\n\nStart Application\n\n\n\n");
+
+	/* Initialize Motor */
+	left_motor.init();
+	right_motor.init();
+
+	left_motor.stop();
+	right_motor.stop();
+
+	pinMode(CATHODE_LED, OUTPUT); 
+	pinMode(ANODE_LED, OUTPUT);
+	digitalWrite(CATHODE_LED, LOW); 
+	digitalWrite(ANODE_LED, 0);
+
+	sei(); /* Enable Global Interrupts */
+}
 
 
 #endif /* __HEAD_H__ */
