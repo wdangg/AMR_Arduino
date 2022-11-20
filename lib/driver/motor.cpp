@@ -1,4 +1,4 @@
-#include "driver.h"
+#include "motor.h"
 
 
 Motor::Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id, Dir_Type dir)
@@ -48,7 +48,7 @@ Dir_Type Motor::get_dir()
 
 void Motor::stop()
 {
-    analogWrite(enable_pin, 0);
+    analogWrite(enable_pin, LOW);
     Motor::dir = e_STOP;
 };
 

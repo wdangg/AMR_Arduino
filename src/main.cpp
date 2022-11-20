@@ -44,8 +44,13 @@ void setup()
 
 	system_setup(); 
 
+	pinMode(ENC_LEFT_A, INPUT_PULLUP);
+    pinMode(ENC_LEFT_B, INPUT_PULLUP);
+	pinMode(ENC_RIGHT_A, INPUT_PULLUP);
+    pinMode(ENC_RIGHT_B, INPUT_PULLUP);
+
 	attachInterrupt(digitalPinToInterrupt(ENC_LEFT_A), ISR_Left_Ticks, RISING);
-	attachInterrupt(digitalPinToInterrupt(ENC_RIGHT_A), ISR_Right_Ticks, RISING);
+	// attachInterrupt(digitalPinToInterrupt(ENC_RIGHT_A), ISR_Right_Ticks, RISING);
 
 	delay(1000);
 } /* END SET_UP */ 
@@ -111,27 +116,13 @@ void ISR_Right_Ticks()
 	/* Encoder_Right_A -  RISING Mode */
 	int8_t val = digitalRead(ENC_RIGHT_B);
 
-	if (right_motor.get_dir() == e_CW)
+	if (0 == val)
 	{
-		if (0 == val)
-		{
-			right_ticks++;
-		}
-		else
-		{
-			right_ticks--;
-		}
+		right_ticks--;
 	}
-	else
+	else if (1 == val)
 	{
-		if (0 == val)
-		{
-			right_ticks--;
-		}
-		else
-		{
-			right_ticks++;
-		}
+		right_ticks++;
 	}
 }
 
@@ -140,27 +131,13 @@ void ISR_Left_Ticks()
 	/* Encoder_Right_A -  RISING Mode */
 	int8_t val = digitalRead(ENC_LEFT_B);
 
-	if (left_motor.get_dir() == e_CW)
+	if (1 == val)
 	{
-		if (0 == val)
-		{
-			left_ticks--;
-		}
-		else
-		{
-			left_ticks++;
-		}
+		left_ticks--;
 	}
-	else
+	else if (0 == val)
 	{
-		if (0 == val)
-		{
-			left_ticks++;
-		}
-		else
-		{
-			left_ticks--;
-		}
+		left_ticks++;
 	}
 }
 
@@ -236,7 +213,7 @@ void ps2_control()
 void control_motor()
 {
 	left_motor.rotate(l_pwm_out);
-	right_motor.rotate(r_pwm_out);
+	// right_motor.rotate(r_pwm_out);
 } /* CONTROL_MOTOR */
 
 void PID_Init()

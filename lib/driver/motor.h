@@ -1,5 +1,5 @@
-#ifndef __DRIVER_H__
-#define __DRIVER_H__
+#ifndef __MOTOR_H__
+#define __MOTOR_H__
 
 #include <Arduino.h>
 #include <ros.h>
@@ -63,4 +63,4 @@ class Motor
 };
 
 
-#endif /*  __DRIVER_H__ */
+#endif /*  __MOTOR_H__ */

@@ -2,7 +2,7 @@
 #define __MIDDLEWARE_H__
 
 
-#include "driver.h"
+#include "motor.h"
 
 
 #endif /* __MIDDLEWARE_H__ */
