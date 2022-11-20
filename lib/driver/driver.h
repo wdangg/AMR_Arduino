@@ -27,6 +27,11 @@ typedef enum motor_id
     RIGHT_ID
 } ID_Type;
 
+typedef enum current_dir
+{
+    e_CCW,
+    e_CW
+} Dir_Type;
 
 class Motor 
 {
@@ -51,6 +56,8 @@ class Motor
         void get_current_pwm(Serial_Type serial_port);
 
         void print_info(Serial_Type serial_type);
+
+        Dir_Type get_dir();
 };
 
 

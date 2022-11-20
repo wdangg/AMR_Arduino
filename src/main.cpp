@@ -35,6 +35,9 @@ void setup()
 	// nh.advertise(rightPub);
 	// nh.advertise(leftPub);
 	// nh.subscribe(sub_cmd_vel);
+	Serial3.begin(115200);
+	Serial3.print("\n\n\n\n\n\nStart Application\n\n\n\n");
+
 	reset_board = false;
 	right_dir = true;
 	left_dir = true;
@@ -105,28 +108,59 @@ void loop()
 
 void ISR_Right_Ticks()
 {
-	// Encoder Right A - attachInterrupts - RISING Mode
+	/* Encoder_Right_A -  RISING Mode */
 	int8_t val = digitalRead(ENC_RIGHT_B);
-	if (val == 0)
+
+	if (digitalRead(IN3) == 1)
 	{
-		right_ticks--;
+		if (0 == val)
+		{
+			right_ticks++;
+		}
+		else
+		{
+			right_ticks--;
+		}
 	}
 	else
 	{
-		right_ticks++;
+		if (0 == val)
+		{
+			right_ticks--;
+		}
+		else
+		{
+			right_ticks++;
+		}
 	}
 }
 
 void ISR_Left_Ticks()
 {
+	/* Encoder_Right_A -  RISING Mode */
 	int8_t val = digitalRead(ENC_LEFT_B);
-	if (val == 0)
+
+	if (digitalRead(IN1) == 1)
 	{
-		left_ticks++;
+		if (0 == val)
+		{
+			left_ticks--;
+		}
+		else
+		{
+			left_ticks++;
+		}
 	}
 	else
 	{
-		left_ticks--;
+		if (0 == val)
+		{
+			left_ticks++;
+		}
+		else
+		{
+			left_ticks--;
+		}
 	}
 }
 

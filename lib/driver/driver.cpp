@@ -34,9 +34,10 @@ void Motor::rotate(int pwm)
         digitalWrite(cw_pin, LOW);
         digitalWrite(ccw_pin, HIGH);
         analogWrite(enable_pin, (-pwm));  
-        Motor::current_pwm = (-pwm);     
+        Motor::current_pwm = (-pwm);   
     }  
 };
+
 
 void Motor::stop()
 {

@@ -76,8 +76,6 @@ void system_setup()
 	
 	TCCR1B = TCCR1B & 0b11111000 | 1;      /* set 31KHz PWM to prevent motor noise */ 
 	
-	Serial3.begin(9600);
-	Serial3.print("\n\n\n\n\n\nStart Application\n\n\n\n");
 
 	/* Initialize Motor */
 	left_motor.init();
