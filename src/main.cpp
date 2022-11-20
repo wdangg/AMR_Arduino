@@ -21,6 +21,10 @@ volatile int32_t left_ticks = 0;
 
 volatile bool reset_board = false;
 
+volatile uint32_t left_isr_count = 0;
+volatile uint32_t left_isr_if = 0;
+volatile uint32_t left_isr_else = 0;
+
 ros::NodeHandle nh;
 
 ros::Subscriber<geometry_msgs::Twist> sub_cmd_vel("cmd_vel", &calc_cmd_vel);
@@ -41,6 +45,10 @@ void setup()
 	reset_board = false;
 	right_dir = true;
 	left_dir = true;
+
+	left_isr_count = 0;
+	left_isr_if = 0;
+	left_isr_else = 0;
 
 	system_setup(); 
 
@@ -103,11 +111,14 @@ void loop()
 	/* Control Motor After Calculate These Parameters */
 	control_motor();
 
-	Serial3.print("left_ticks: "); Serial3.print(left_ticks);
-	Serial3.print("\t\tright_ticks: "); Serial3.println(right_ticks);
+	// Serial3.print("left_ticks: "); Serial3.print(left_ticks);
+	// Serial3.print("\t\tright_ticks: "); Serial3.println(right_ticks);
 
-	// Serial3.print("A: "); Serial3.print(digitalRead(ENC_LEFT_A));
-	// Serial3.print("\t\tB: "); Serial3.println(digitalRead(ENC_LEFT_B));
+	// Serial3.print("left_isr_count: "); Serial3.println(left_isr_count);
+
+	Serial3.print("left_isr_IF: "); Serial3.print(left_isr_if);
+	Serial3.print("\t\tleft_isr_ELSE: "); Serial3.print(left_isr_else);
+	Serial3.print("\t\tisr_count: "); Serial3.println(left_isr_count);
 
 } /* END LOOP */
 
@@ -120,7 +131,7 @@ void ISR_Right_Ticks()
 	{
 		right_ticks--;
 	}
-	else if (1 == val)
+	else 
 	{
 		right_ticks++;
 	}
@@ -134,11 +145,14 @@ void ISR_Left_Ticks()
 	if (1 == val)
 	{
 		left_ticks--;
-	}
-	else if (0 == val)
+		left_isr_if++;
+	} 
+	else 
 	{
 		left_ticks++;
+		left_isr_if--;
 	}
+	left_isr_count++;
 }
 
 void calc_cmd_vel(const geometry_msgs::Twist& cmdVel)
