@@ -63,8 +63,8 @@ PID left_PID(&left_PID_Input, &left_PID_Output, &left_PID_Setpoint, l_Kp, l_Ki, 
 PID right_PID(&right_PID_Input, &right_PID_Output, &right_PID_Setpoint, r_Kp, r_Ki, r_Kd, DIRECT);
 
 
-Motor left_motor(ENA, IN1, IN2, ENC_LEFT_A, ENC_LEFT_B, LEFT_ID);
-Motor right_motor(ENB, IN3, IN4, ENC_RIGHT_A, ENC_RIGHT_B, RIGHT_ID);
+Motor left_motor(ENA, IN1, IN2, ENC_LEFT_A, ENC_LEFT_B, LEFT_ID, e_STOP);
+Motor right_motor(ENB, IN3, IN4, ENC_RIGHT_A, ENC_RIGHT_B, RIGHT_ID, e_STOP);
 
 
 

@@ -30,7 +30,8 @@ typedef enum motor_id
 typedef enum current_dir
 {
     e_CCW,
-    e_CW
+    e_CW,
+    e_STOP
 } Dir_Type;
 
 class Motor 
@@ -43,9 +44,10 @@ class Motor
         int encoder_B;
         int current_pwm;
         ID_Type id;
+        Dir_Type dir;
 
     public:
-        Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id);
+        Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id, Dir_Type dir);
 
         void init();
 

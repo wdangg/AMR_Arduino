@@ -1,7 +1,7 @@
 #include "driver.h"
 
 
-Motor::Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id)
+Motor::Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder_B, ID_Type id, Dir_Type dir)
 {
     Motor::enable_pin = enable_pin;
     Motor::cw_pin = cw_pin;
@@ -9,6 +9,7 @@ Motor::Motor(int enable_pin, int cw_pin, int ccw_pin, int encoder_A, int encoder
     Motor::encoder_A = encoder_A;
     Motor::encoder_B = encoder_B;    
     Motor::id = id;
+    Motor::dir = e_STOP;
 };
 
 void Motor::init()
@@ -28,6 +29,7 @@ void Motor::rotate(int pwm)
         digitalWrite(ccw_pin, LOW);
         analogWrite(enable_pin, pwm);
         Motor::current_pwm = pwm;
+        Motor::dir = e_CW;
     }
     else
     {
@@ -35,13 +37,19 @@ void Motor::rotate(int pwm)
         digitalWrite(ccw_pin, HIGH);
         analogWrite(enable_pin, (-pwm));  
         Motor::current_pwm = (-pwm);   
+        Motor::dir = e_CCW;
     }  
 };
 
+Dir_Type Motor::get_dir()
+{
+    return Motor::dir;
+}
 
 void Motor::stop()
 {
     analogWrite(enable_pin, 0);
+    Motor::dir = e_STOP;
 };
 
 void Motor::print_info(Serial_Type serial_type)

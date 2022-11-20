@@ -111,7 +111,7 @@ void ISR_Right_Ticks()
 	/* Encoder_Right_A -  RISING Mode */
 	int8_t val = digitalRead(ENC_RIGHT_B);
 
-	if (digitalRead(IN3) == 1)
+	if (left_motor.get_dir() == e_CW)
 	{
 		if (0 == val)
 		{
@@ -140,7 +140,7 @@ void ISR_Left_Ticks()
 	/* Encoder_Right_A -  RISING Mode */
 	int8_t val = digitalRead(ENC_LEFT_B);
 
-	if (digitalRead(IN1) == 1)
+	if (right_motor.get_dir() == e_CW)
 	{
 		if (0 == val)
 		{
