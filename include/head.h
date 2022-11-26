@@ -1,9 +1,21 @@
 #ifndef __HEAD_H__
 #define __HEAD_H__
 
-#include "middleware.h"
+#include <Arduino.h>
+#include <ros.h>
+#include <std_msgs/String.h>
+#include <std_msgs/Int8.h>
+#include <std_msgs/Int16.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Int64.h>
+#include <geometry_msgs/Twist.h>
+#include <PID_v1.h>
+#include <PS2X_lib.h>
+
+#include "motor_calc.h"
 #include "MPU6050_tockn.h"
 #include "PS2X_lib.h"
+#include "motor.h"
 
 /**
  * @brief Definition
@@ -48,8 +60,6 @@ int8_t error = 0;
 int8_t type = 0;
 int8_t vibrate = 0;
 volatile bool manual_mode = false;
-volatile int cb_pwma = 0, cb_pwmb;
-volatile int l_pwm_out = 0, r_pwm_out = 0;
 volatile uint32_t pre_millis = 0, cur_millis = 0;
 volatile uint32_t last_cmd_receive = 0;
 

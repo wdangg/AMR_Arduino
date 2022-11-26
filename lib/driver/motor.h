@@ -2,24 +2,6 @@
 #define __MOTOR_H__
 
 #include <Arduino.h>
-#include <ros.h>
-#include <std_msgs/Int8.h>
-#include <std_msgs/Int16.h>
-#include <std_msgs/Int32.h>
-#include <std_msgs/Int64.h>
-#include <geometry_msgs/Twist.h>
-#include <PID_v1.h>
-#include <PS2X_lib.h>
-
-
-
-typedef enum serial
-{
-    e_SERIAL,
-    e_SERIAL1,
-    e_SERIAL2,
-    e_SERIAL3
-} Serial_Type;
 
 typedef enum motor_id
 {
@@ -51,13 +33,15 @@ class Motor
 
         void init();
 
+        void set_dir(bool dir);
+
         void rotate(int pwm);
 
         void stop();
 
-        void get_current_pwm(Serial_Type serial_port);
+        void get_current_pwm(HardwareSerial &p_serial);
 
-        void print_info(Serial_Type serial_type);
+        void get_info(HardwareSerial &p_serial);
 
         Dir_Type get_dir();
 };
